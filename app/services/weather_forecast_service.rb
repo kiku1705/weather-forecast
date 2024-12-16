@@ -39,7 +39,7 @@ class WeatherForecastService < ApplicationService
 
     private
     def api_key
-      (ENV['OPEN_WEATHER_MAP_API_KEY'] || "6ad26ace0b28f1a5ddd8f2a25c305f1b")
+      ENV['OPEN_WEATHER_MAP_API_KEY']
     end
 
     def connection
