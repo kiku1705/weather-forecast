@@ -1,0 +1,34 @@
+
+<div class="weather-card">
+    <%= render "shared/flash" %>
+		<div class="row justify-content-end">
+			<div class="col-auto">
+				<div class="sunny-icon">
+					<i class="bi bi-sun-fill"></i>
+				</div>
+			</div>
+		</div>
+		<h1 class="weather-title text-center mb-4">
+		Weather Forecast</h1>
+    <%= form_tag('/forecasts/show',method: 'get', remote: true, :class => "form") do %>
+      <div class="input-group mb-3">
+        <%= text_field_tag(:address, @address , placeholder: 'street, city, state, country',size: 70,:class => "form-control") %><br>
+        <%= submit_tag("Lookup", :class=> "btn btn-primary weather-btn") %>
+      </div>
+    <% end %>
+    <% if @weather_data %>
+		<div id="weatherInfo">
+			<div class="weather-icon text-center">
+				<i class="bi bi-cloud-sun"></i>
+			</div>
+			<div class="weather-info text-center">
+				<p class=<%= is_cache_hit(@weather_data["cache_hit"]) %>>Temperature:<%= @weather_data["current_temp"] %></p>
+				<p>Minimum: <%= @weather_data["min_temp"] %></p>
+				<p>Maximum:<%= @weather_data["max_temp"] %></p>
+        <p>Feels like: <%= @weather_data["feels_like"] %></p>
+				<p>Humidity: <%= @weather_data["humidity"] %></p>
+				<p>Wind Speed: <%= @weather_data["wind_speed"] %></p>
+			</div>
+		</div>
+    <% end %>
+	</div>

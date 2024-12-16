@@ -1,0 +1,18 @@
+<div class="weather-card">
+    <%= render "shared/flash" %>
+		<div class="row justify-content-end">
+			<div class="col-auto">
+				<div class="sunny-icon">
+					<i class="bi bi-sun-fill"></i>
+				</div>
+			</div>
+		</div>
+		<h1 class="weather-title text-center mb-4">
+		Weather Forecast</h1>
+    <%= form_tag('/forecasts/show',method: 'get', remote: true, :class => "form") do %>
+      <div class="input-group mb-3">
+        <%= text_field_tag(:address, @address , placeholder: 'street, city, state, country',size: 70,:class => "form-control") %><br>
+        <%= submit_tag("Lookup", :class=> "btn btn-primary weather-btn") %>
+      </div>
+    <% end %>
+</div>
