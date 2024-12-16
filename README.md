@@ -18,7 +18,7 @@ Requirements:
 
 ## Installation
 ```
-git clone https://github.com/alexreisner/geocoder.git
+git clone git@github.com:kiku1705/weather-forecast.git
 cd weather_forecast
 ```
 Use the `bundle install` command to install project dependencies.
