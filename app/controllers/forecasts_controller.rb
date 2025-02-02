@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# forecasts controller to get data from the service
+
 class ForecastsController < ApplicationController
   before_action :redirect_to_root, if: :invalid_address?, only: [:show]
 

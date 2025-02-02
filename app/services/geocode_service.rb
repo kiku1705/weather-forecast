@@ -17,7 +17,7 @@ class GeocodeService
       country_code: results.first.country_code
     )
   rescue SocketError, Timeout::Error, Geocoder::OverQueryLimitError, Geocoder::RequestDenied,
-         Geocoder::RequestDenied, Geocoder::InvalidRequest, Geocoder::InvalidApiKey => e
+         Geocoder::InvalidRequest, Geocoder::InvalidApiKey => e
     raise e.wrapped_exception, "System failure, please check with your administrator: #{e}"
   end
 end

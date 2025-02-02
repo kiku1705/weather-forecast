@@ -1,0 +1,11 @@
+inherit_from: .rubocop_todo.yml
+
+AllCops:
+  SuggestExtensions:
+    Enabled: false
+Style/Documentation:
+  Enabled: false
+Naming/PredicateName:
+  Enabled: false
+Metrics/BlockLength:
+  Enabled: false
