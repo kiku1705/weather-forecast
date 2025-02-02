@@ -1,10 +1,12 @@
-#service to fetch weather data from openweathermap API
+# frozen_string_literal: true
+
+# service to fetch weather data from openweathermap API
 class WeatherForecastService < ApplicationService
-  BASE_URL = 'https://api.openweathermap.org/data/2.5'.freeze
+  BASE_URL = 'https://api.openweathermap.org/data/2.5'
   CACHE_EXPIRATION_TIME = 30.minutes.freeze
 
   class << self
-    # Method to fetch current weather data 
+    # Method to fetch current weather data
     # API params
     # required - lat, lon, appid
     # optional - modes, units and lang
@@ -15,29 +17,29 @@ class WeatherForecastService < ApplicationService
     def call(location, options)
       w_cache_key = cache_key(location.country_code, location.postal_code)
       data = RedisCacheService.get_cache_data(w_cache_key)
-      return JSON.parse(data).merge("cache_hit" => true) unless data.nil?
+      return JSON.parse(data).merge('cache_hit' => true) unless data.nil?
+
       lat, lon = location.coordinates
       uri = URI("#{BASE_URL}/weather")
       params = {
-            lat: lat,
-            lon: lon,
-            appid: api_key,
-          }.merge(options)
-        begin
-          response = connection.get(uri, params)
-          if response.success?
-            data = parse_weather(JSON.parse(response.body))
-            RedisCacheService.store_cache_data(w_cache_key, data.to_json,CACHE_EXPIRATION_TIME)
-            data.merge("cache_hit" =>  false)
-          else
-            raise response.body
-          end
-        rescue SocketError, Timeout::Error, StandardError => e
-          raise e.wrapped_exception, "System failure, please check with your administrator: #{e}"
-        end
+        lat: lat,
+        lon: lon,
+        appid: api_key
+      }.merge(options)
+      begin
+        response = connection.get(uri, params)
+        raise response.body unless response.success?
+
+        data = parse_weather(JSON.parse(response.body))
+        RedisCacheService.store_cache_data(w_cache_key, data.to_json, CACHE_EXPIRATION_TIME)
+        data.merge('cache_hit' => false)
+      rescue SocketError, Timeout::Error, StandardError => e
+        raise e.wrapped_exception, "System failure, please check with your administrator: #{e}"
+      end
     end
 
     private
+
     def api_key
       ENV['OPEN_WEATHER_MAP_API_KEY']
     end
@@ -48,21 +50,20 @@ class WeatherForecastService < ApplicationService
       end
     end
 
-
     # parse weather data from response
     # returns current weather data
     def parse_weather(resp)
       {
-        "current_temp" => resp.dig("main", "temp"),
-        "min_temp" => resp.dig("main", "temp_min"),
-        "max_temp" => resp.dig("main", "temp_max"),
-        "feels_like" => resp.dig("main", "feels_like"),
-        "humidity" => resp.dig("main", "humidity"),
-        "wind_speed" => resp.dig("wind", "speed")
-    }
+        'current_temp' => resp.dig('main', 'temp'),
+        'min_temp' => resp.dig('main', 'temp_min'),
+        'max_temp' => resp.dig('main', 'temp_max'),
+        'feels_like' => resp.dig('main', 'feels_like'),
+        'humidity' => resp.dig('main', 'humidity'),
+        'wind_speed' => resp.dig('wind', 'speed')
+      }
     end
-    
-    #cache_key to store weather data in redis
+
+    # cache_key to store weather data in redis
     def cache_key(prefix, key)
       "weather/#{prefix}/#{key}"
     end

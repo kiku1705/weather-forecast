@@ -1,4 +1,6 @@
-# this service is to set and get data from cache 
+# frozen_string_literal: true
+
+# this service is to set and get data from cache
 class RedisCacheService
   def self.store_cache_data(cache_key, value, expiration_time)
     REDIS.with do |conn|
@@ -10,6 +12,6 @@ class RedisCacheService
     REDIS.with do |conn|
       return conn.get(cache_key) if conn.exists(cache_key)
     end
-    return nil
+    nil
   end
 end
